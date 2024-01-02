@@ -4,9 +4,10 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 from employees.models import Employee
+from django_practice.models import BaseModel
 
 
-class Contact(models.Model):
+class Contact(BaseModel):
     """
     A class representing different contact within the system.
 
