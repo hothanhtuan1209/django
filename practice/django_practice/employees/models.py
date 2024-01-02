@@ -2,9 +2,10 @@ import uuid
 
 from django.db import models
 from enum import Enum
-from datetime import date
+from datetime import date, timedelta
 
 from departments.models import Department
+from django_practice.models import BaseModel
 
 
 class ActiveStatus(Enum):
@@ -18,7 +19,7 @@ class Gender(Enum):
     OTHER = "Other"
 
 
-class Employee(models.Model):
+class Employee(BaseModel):
     """
     A class representing different employees within the system.
 
@@ -40,6 +41,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=100)
     birthday = models.DateField()
     email = models.EmailField(max_length=100, unique=True)
+    create_at = models.DateTimeField(auto_now_add=True)
     gender = models.CharField(
         max_length=10,
         choices=[(gender.value, gender.value) for gender in Gender],
