@@ -38,6 +38,12 @@ This is a project used to learn, practice and apply missing skills about django.
 > py manage.py makemigrations
 > py manage.py migrate
 
+6. Provide initial data for model
+- Department
+> py manage.py loaddata departments_data.json
+- Employee
+> py manage.py initial_data_employee
+
 6. Create superuser
 > py manage.py createsuperuser
 
