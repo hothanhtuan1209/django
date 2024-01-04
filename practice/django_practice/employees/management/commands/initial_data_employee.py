@@ -1,48 +1,42 @@
+import random
+
+from faker import Faker
 from django.core.management.base import BaseCommand
+
 from employees.models import Employee
-from datetime import datetime
 from departments.models import Department
 
 
 class Command(BaseCommand):
+    help = 'Create fake employees for testing'
 
-    def handle(self, *args, **options):
-        # Get existing departments
-        it_department = Department.objects.get(name='IT')
-        hr_department = Department.objects.get(name='HR')
-        sales_department = Department.objects.get(name='Sale')
+    def handle(self, *args, **kwargs):
+        self.stdout.write(self.style.SUCCESS('Creating fake employees...'))
 
-        # Create employees and link them to existing departments
-        Employee.objects.get_or_create(
-            first_name='Tran Van',
-            last_name='Son',
-            birthday=datetime(1990, 7, 17),
-            email='sontran1707@gmail.com',
-            gender='Male',
-            status='Active',
-            department=it_department
-        )
+        department_names = ['IT', 'Business', 'HR', 'Sale']
 
-        Employee.objects.get_or_create(
-            first_name='Tran Thi',
-            last_name='No',
-            birthday=datetime(2000, 8, 22),
-            email='nothi@gmail.com',
-            gender='Female',
-            status='Active',
-            department=hr_department
-        )
+        for i in range(200):
+            first_name = Faker().first_name()
+            last_name = Faker().last_name()
+            birthday = Faker().date_of_birth(minimum_age=20, maximum_age=60)
+            email = Faker().email()
+            gender = random.choice(['Male', 'Female'])
+            status = 'Active'
 
-        Employee.objects.get_or_create(
-            first_name='Nguyen Van',
-            last_name='Nhat',
-            birthday=datetime(1999, 11, 10),
-            email='nhatnguyen@gmail.com',
-            gender='Male',
-            status='Active',
-            department=sales_department
-        )
+            department_name = random.choice(department_names)
+
+            department = Department.objects.get(name=department_name)
+
+            Employee.objects.create(
+                first_name=first_name,
+                last_name=last_name,
+                birthday=birthday,
+                email=email,
+                gender=gender,
+                status=status,
+                department=department
+            )
 
         self.stdout.write(
-            self.style.SUCCESS('Initial data created successfully!')
+            self.style.SUCCESS('Fake employees created successfully!')
         )

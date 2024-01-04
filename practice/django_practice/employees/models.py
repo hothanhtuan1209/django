@@ -72,13 +72,13 @@ class Employee(BaseModel):
         return str(self.get_full_name())
 
     @classmethod
-    def males_over_25(cls):
+    def males_over_35(cls):
         """
-        Get a list of all male employees older than 25 years old.
+        Get a list of all male employees older than 35 years old.
         """
 
         return cls.objects.filter(
-            gender=Gender.MALE.value, birthday__lt=date.today() - timedelta(days=25 * 365)
+            gender=Gender.MALE.value, birthday__lt=date.today() - timedelta(days=35 * 365)
         )
 
     @classmethod
