@@ -40,7 +40,7 @@ This is a project used to learn, practice and apply missing skills about django.
 
 6. Provide initial data for model
 - Department
-> py manage.py loaddata departments_data.json
+> py manage.py initial_data_department
 - Employee
 > py manage.py initial_data_employee
 
