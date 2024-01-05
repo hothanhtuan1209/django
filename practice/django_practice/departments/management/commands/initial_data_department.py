@@ -7,7 +7,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         departments_data = [
-            {'name': 'Accounting', 'description': 'Accounting department'}
+            {'name': 'Accounting', 'description': 'Accounting department'},
+            {'name': 'IT', 'description': 'Information Technology'},
+            {'name': 'Sale', 'description': 'Sales Department'},
+            {'name': 'HR', 'description': 'Human Resources Department'},
+            {'name': 'Business', 'description': 'Business Department'},
         ]
 
         for data in departments_data:
