@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from enum import Enum
 from datetime import date, timedelta
+from django.core.exceptions import ValidationError
 
 from departments.models import Department
 from django_practice.models import BaseModel
@@ -17,6 +18,15 @@ class Gender(Enum):
     MALE = "Male"
     FEMALE = "Female"
     OTHER = "Other"
+
+
+class AgeGreaterThan20(models.Manager):
+    def get_employee_greater_than_20(self):
+        """
+        Get all employee have birthday greater than 20 years old
+        """
+
+        return self.filter(birthday__lt=date.today() - timedelta(20*365))
 
 
 class Employee(BaseModel):
@@ -55,6 +65,17 @@ class Employee(BaseModel):
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE
     )
+    objects = AgeGreaterThan20()
+
+    def validate_data(self):
+        super(Employee, self).clean()
+
+        age_limit = 18
+        if (date.today() - self.birthday).days < timedelta(age_limit * 365):
+            raise ValidationError('Employee must be at least 20 years old')
+
+        if not self.email or '@' not in self.email:
+            raise ValidationError('Invalid email format')
 
     def get_full_name(self):
         """
@@ -88,3 +109,10 @@ class Employee(BaseModel):
         """
 
         return cls.objects.filter(department__name='Sale', birthday__year__gt=2000)
+
+    @classmethod
+    def get_it_employees(cls):
+        """
+        Return queryset contain a list employee in IT department.
+        """
+        return cls.objects.filter(department__name='IT')
