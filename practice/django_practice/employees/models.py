@@ -1,23 +1,12 @@
 import uuid
 
 from django.db import models
-from enum import Enum
 from datetime import date, timedelta
 from django.core.exceptions import ValidationError
 
 from departments.models import Department
 from django_practice.models import BaseModel
-
-
-class ActiveStatus(Enum):
-    ACTIVE = "Active"
-    DISABLED = "Disabled"
-
-
-class Gender(Enum):
-    MALE = "Male"
-    FEMALE = "Female"
-    OTHER = "Other"
+from constant.enum import Gender, ActiveStatus
 
 
 class AgeGreaterThan20(models.Manager):
