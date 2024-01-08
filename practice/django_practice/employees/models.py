@@ -35,7 +35,6 @@ class Employee(BaseModel):
     last_name = models.CharField(max_length=100)
     birthday = models.DateField()
     email = models.EmailField(max_length=100, unique=True)
-    create_at = models.DateTimeField(auto_now_add=True)
     gender = models.CharField(
         max_length=10,
         choices=[(gender.value, gender.value) for gender in Gender],
