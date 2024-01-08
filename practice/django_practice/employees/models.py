@@ -71,7 +71,7 @@ class Employee(BaseModel):
         super(Employee, self).clean()
 
         age_limit = 18
-        if (date.today() - self.birthday).days < timedelta(age_limit * 365):
+        if (date.today() - self.birthday).days < timedelta(age_limit * 365 + age_limit//4):
             raise ValidationError('Employee must be at least 20 years old')
 
         if not self.email or '@' not in self.email:
@@ -99,7 +99,7 @@ class Employee(BaseModel):
         """
 
         return cls.objects.filter(
-            gender=Gender.MALE.value, birthday__lt=date.today() - timedelta(days=35 * 365)
+            gender=Gender.MALE.value, birthday__lt=date.today() - timedelta(35 * 365 + 35 // 4)
         )
 
     @classmethod
