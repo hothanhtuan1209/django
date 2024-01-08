@@ -1,5 +1,3 @@
-import uuid
-
 from django.db import models
 from django.core.validators import RegexValidator
 
@@ -19,9 +17,6 @@ class Contact(BaseModel):
         contact belongs.
     """
 
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False
-    )
     phone_number = models.CharField(
         validators=[RegexValidator(r"^0\d{9}$")], max_length=10
     )

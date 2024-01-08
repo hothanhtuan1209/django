@@ -1,12 +1,10 @@
-import uuid
-
 from django.db import models
 from datetime import date, timedelta
 from django.core.exceptions import ValidationError
 
 from departments.models import Department
 from django_practice.models import BaseModel
-from constant.enum import Gender, ActiveStatus
+from django_practice.constants.enum import Gender, ActiveStatus
 
 
 class AgeGreaterThan20(models.Manager):
@@ -33,9 +31,6 @@ class Employee(BaseModel):
         department (ForeignKey): This is the instance of department.
     """
 
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False
-    )
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     birthday = models.DateField()
