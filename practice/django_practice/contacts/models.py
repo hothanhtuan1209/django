@@ -15,7 +15,7 @@ class Contact(BaseModel):
         id (UUIDField): The primary key for the contact.
         phone_number (CharField): The employee's phone number.
         address (CharField): The employee's address
-        employee (ForeignKey): the instance of employee whom the
+        employee (ForeignKey): The instance of employee whom the
         contact belongs.
     """
 
