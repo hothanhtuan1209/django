@@ -1,7 +1,7 @@
 from datetime import date
 
 
-def calculate_age(birthday):
+def calculate_age(today, birthday):
     """
     Calculate the age based on the provided birthday.
     """

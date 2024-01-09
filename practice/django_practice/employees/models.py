@@ -1,10 +1,11 @@
 from django.db import models
+from datetime import date
 from django.core.exceptions import ValidationError
 
 from departments.models import Department
 from django_practice.models import BaseModel
 from django_practice.constants.enum import Gender, ActiveStatus
-from number_of_age import calculate_age
+from .utils.number_of_age import calculate_age
 
 
 class EmployeeFilterManager(models.Manager):
@@ -81,9 +82,15 @@ class Employee(BaseModel):
         Get a list of all male employees older than 35 years old.
         """
 
-        return cls.objects.filter(gender=Gender.MALE.value).filter(
-            calculate_age(Employee.birthday) > 35
-        )
+        today = date.today()
+        employees_over_35 = []
+
+        for employee in cls.objects.filter(gender=Gender.MALE.value):
+            age = calculate_age(today, employee.birthday)
+            if age > 35:
+                employees_over_35.append(employee)
+
+        return employees_over_35
 
     @classmethod
     def sale_after_2000(cls):
@@ -98,4 +105,5 @@ class Employee(BaseModel):
         """
         Return queryset contain a list employee in IT department.
         """
+
         return cls.objects.filter(department__name="IT")
