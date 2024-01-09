@@ -13,7 +13,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         self.stdout.write(self.style.SUCCESS("Creating fake employees..."))
 
-        department_names = Department.objects.values_list("name", flat=True)
+        departments = list(Department.objects.all())
 
         employees = []
 
@@ -25,7 +25,7 @@ class Command(BaseCommand):
             gender = random.choice(["Male", "Female"])
             status = "Active"
 
-            department = Department.objects.get(name=random.choice(department_names))
+            department = random.choice(departments)
 
             employees.append(
                 Employee(
@@ -41,4 +41,6 @@ class Command(BaseCommand):
 
         Employee.objects.bulk_create(employees)
 
-        self.stdout.write(self.style.SUCCESS("Fake employees created successfully!"))
+        self.stdout.write(
+            self.style.SUCCESS("Fake employees created successfully!")
+        )
