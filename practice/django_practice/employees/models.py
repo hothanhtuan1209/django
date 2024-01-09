@@ -7,8 +7,8 @@ from django_practice.models import BaseModel
 from django_practice.constants.enum import Gender, ActiveStatus
 
 
-class AgeGreaterThan20(models.Manager):
-    def get_employee_greater_than_20(self):
+class EmployeeFilterManager(models.Manager):
+    def get_employees_filtered_by_age(self):
         """
         Get all employee have birthday greater than 20 years old
         """
@@ -50,7 +50,7 @@ class Employee(BaseModel):
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE
     )
-    objects = AgeGreaterThan20()
+    objects = EmployeeFilterManager()
 
     def validate_data(self):
         super(Employee, self).clean()
