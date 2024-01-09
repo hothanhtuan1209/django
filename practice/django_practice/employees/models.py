@@ -1,10 +1,10 @@
 from django.db import models
-from datetime import date, timedelta
 from django.core.exceptions import ValidationError
 
 from departments.models import Department
 from django_practice.models import BaseModel
 from django_practice.constants.enum import Gender, ActiveStatus
+from number_of_age import calculate_age
 
 
 class EmployeeFilterManager(models.Manager):
@@ -13,7 +13,7 @@ class EmployeeFilterManager(models.Manager):
         Get all employee have birthday greater than 20 years old
         """
 
-        return self.filter(birthday__lt=date.today() - timedelta(20*365))
+        return self.filter(calculate_age(Employee.birthday) > 20)
 
 
 class Employee(BaseModel):
@@ -47,20 +47,18 @@ class Employee(BaseModel):
         choices=[(status.value, status.value) for status in ActiveStatus],
         default=ActiveStatus.ACTIVE.value,
     )
-    department = models.ForeignKey(
-        Department, on_delete=models.CASCADE
-    )
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
     objects = EmployeeFilterManager()
 
     def validate_data(self):
         super(Employee, self).clean()
 
         age_limit = 18
-        if (date.today() - self.birthday).days < timedelta(age_limit * 365 + age_limit//4):
-            raise ValidationError('Employee must be at least 20 years old')
+        if calculate_age(self.birthday) < age_limit:
+            raise ValidationError("Employee must be at least 20 years old")
 
-        if not self.email or '@' not in self.email:
-            raise ValidationError('Invalid email format')
+        if not self.email or "@" not in self.email:
+            raise ValidationError("Invalid email format")
 
     def get_full_name(self):
         """
@@ -83,8 +81,8 @@ class Employee(BaseModel):
         Get a list of all male employees older than 35 years old.
         """
 
-        return cls.objects.filter(
-            gender=Gender.MALE.value, birthday__lt=date.today() - timedelta(35 * 365 + 35 // 4)
+        return cls.objects.filter(gender=Gender.MALE.value).filter(
+            calculate_age(Employee.birthday) > 35
         )
 
     @classmethod
@@ -93,11 +91,11 @@ class Employee(BaseModel):
         Get a list of employees in the Sales department and born after 2000.
         """
 
-        return cls.objects.filter(department__name='Sale', birthday__year__gt=2000)
+        return cls.objects.filter(department__name="Sale", birthday__year__gt=2000)
 
     @classmethod
     def get_it_employees(cls):
         """
         Return queryset contain a list employee in IT department.
         """
-        return cls.objects.filter(department__name='IT')
+        return cls.objects.filter(department__name="IT")
