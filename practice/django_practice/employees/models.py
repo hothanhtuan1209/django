@@ -55,7 +55,7 @@ class Employee(BaseModel):
 
         age_limit = 18
         if calculate_age(self.birthday) < age_limit:
-            raise ValidationError("Employee must be at least 20 years old")
+            raise ValidationError("Employee must be at least 18 years old")
 
         if not self.email or "@" not in self.email:
             raise ValidationError("Invalid email format")
