@@ -12,9 +12,11 @@ class Contact(BaseModel):
     Attributes:
         id (UUIDField): The primary key for the contact.
         phone_number (CharField): The employee's phone number.
-        address (CharField): The employee's address
+        address (CharField): The employee's address.
         employee (ForeignKey): The instance of employee whom the
         contact belongs.
+        create_at (DateTimeField): A field to store the creation time of
+        objects.
     """
 
     phone_number = models.CharField(

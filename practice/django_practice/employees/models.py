@@ -29,6 +29,8 @@ class Employee(BaseModel):
         email(EmailField): The employee's email.
         status (CharField): The status of the employee in company.
         department (ForeignKey): This is the instance of department.
+        create_at (DateTimeField): A field to store the creation time of
+        objects.
     """
 
     first_name = models.CharField(max_length=100)

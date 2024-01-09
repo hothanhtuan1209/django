@@ -8,9 +8,11 @@ class Department(BaseModel):
     A class representing different departments within the system.
 
     Attributes:
-        id (UUID): The primary key for the department
-        name (CharField): The name of the department
-        description (TextField): The description of the department
+        id (UUID): The primary key for the department.
+        name (CharField): The name of the department.
+        description (TextField): The description of the department.
+        create_at (DateTimeField): A field to store the creation time of
+        objects.
     """
 
     name = models.CharField(max_length=100, unique=True)
