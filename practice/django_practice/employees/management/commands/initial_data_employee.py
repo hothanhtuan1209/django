@@ -13,7 +13,9 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         self.stdout.write(self.style.SUCCESS('Creating fake employees...'))
 
-        department_names = ['IT', 'Business', 'HR', 'Sale']
+        department_names = Department.objects.values_list('name', flat=True)
+
+        employees = []
 
         for i in range(200):
             first_name = Faker().first_name()
@@ -27,15 +29,19 @@ class Command(BaseCommand):
 
             department = Department.objects.get(name=department_name)
 
-            Employee.objects.create(
-                first_name=first_name,
-                last_name=last_name,
-                birthday=birthday,
-                email=email,
-                gender=gender,
-                status=status,
-                department=department
+            employees.append(
+                Employee(
+                    first_name=first_name,
+                    last_name=last_name,
+                    birthday=birthday,
+                    email=email,
+                    gender=gender,
+                    status=status,
+                    department=department
+                )
             )
+
+        Employee.objects.bulk_create(employees)
 
         self.stdout.write(
             self.style.SUCCESS('Fake employees created successfully!')
