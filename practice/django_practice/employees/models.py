@@ -14,7 +14,17 @@ class EmployeeFilterManager(models.Manager):
         Get all employee have birthday greater than 20 years old
         """
 
-        return self.filter(calculate_age(Employee.birthday) > 20)
+        today = date.today()
+        age_limit = 20
+
+        employees_over_20 = []
+
+        for employee in self.filter():
+            age = calculate_age(today, employee.birthday)
+            if age > age_limit:
+                employees_over_20.append(employee)
+
+        return employees_over_20
 
 
 class Employee(BaseModel):
