@@ -1,11 +1,11 @@
 from django.db import models
 from datetime import date
-from django.core.exceptions import ValidationError
 
 from departments.models import Department
 from django_practice.models import BaseModel
 from django_practice.constants.enum import Gender, ActiveStatus
 from .utils.number_of_age import calculate_age
+from .validate.validation_employee import validate_age, validate_email
 
 
 class EmployeeFilterManager(models.Manager):
@@ -46,8 +46,10 @@ class Employee(BaseModel):
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    birthday = models.DateField()
-    email = models.EmailField(max_length=100, unique=True)
+    birthday = models.DateField(validators=[validate_age])
+    email = models.EmailField(
+        max_length=100, unique=True, validators=[validate_email]
+    )
     gender = models.CharField(
         max_length=10,
         choices=[(gender.value, gender.value) for gender in Gender],
@@ -60,16 +62,6 @@ class Employee(BaseModel):
     )
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     objects = EmployeeFilterManager()
-
-    def validate_data(self):
-        super(Employee, self).clean()
-
-        age_limit = 18
-        if calculate_age(self.birthday) < age_limit:
-            raise ValidationError("Employee must be at least 18 years old")
-
-        if not self.email or "@" not in self.email:
-            raise ValidationError("Invalid email format")
 
     def get_full_name(self):
         """
