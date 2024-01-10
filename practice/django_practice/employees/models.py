@@ -8,6 +8,41 @@ from .utils.number_of_age import calculate_age
 from .validate.validation_employee import validate_age, validate_email
 
 
+class EmployeeQuerySet(models.QuerySet):
+    def males_over_age(self):
+        """
+        Get a list of all male employees older than 35 years old.
+        """
+
+        today = date.today()
+        age_variable = 35
+
+        employees_over_age = [
+            employee
+            for employee in self.filter(gender=Gender.MALE.value)
+            if calculate_age(today, employee.birthday) > age_variable
+        ]
+
+        return employees_over_age
+
+    def sale_after_year(self):
+        """
+        Get a list of employees in the Sales department and born after 2000.
+        """
+
+        year_of_birth = 2000
+        return self.filter(
+            department__name="Sale", birthday__year__gt=year_of_birth
+        )
+
+    def get_it_employees(self):
+        """
+        Return queryset contain a list employee in IT department.
+        """
+
+        return self.filter(department__name="IT")
+
+
 class EmployeeFilterManager(models.Manager):
     def get_employees_filtered_by_age(self):
         """
@@ -75,39 +110,3 @@ class Employee(BaseModel):
         """
 
         return str(self.get_full_name())
-
-    @classmethod
-    def males_over_age(cls):
-        """
-        Get a list of all male employees older than 35 years old.
-        """
-
-        today = date.today()
-        age_variable = 35
-
-        employees_over_age = [
-            employee
-            for employee in cls.objects.filter(gender=Gender.MALE.value)
-            if calculate_age(today, employee.birthday) > age_variable
-        ]
-
-        return employees_over_age
-
-    @classmethod
-    def sale_after_year(cls):
-        """
-        Get a list of employees in the Sales department and born after 2000.
-        """
-
-        year_of_birth = 2000
-        return cls.objects.filter(
-            department__name="Sale", birthday__year__gt=year_of_birth
-        )
-
-    @classmethod
-    def get_it_employees(cls):
-        """
-        Return queryset contain a list employee in IT department.
-        """
-
-        return cls.objects.filter(department__name="IT")
