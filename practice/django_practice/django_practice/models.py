@@ -18,7 +18,7 @@ class BaseModel(models.Model):
         time of objects.
     """
 
-    create_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     archived = models.BooleanField(default=False)
     modified_at = models.DateTimeField(auto_now=True)
