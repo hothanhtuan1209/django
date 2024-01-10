@@ -47,9 +47,7 @@ class Employee(BaseModel):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     birthday = models.DateField(validators=[validate_age])
-    email = models.EmailField(
-        max_length=100, unique=True, validators=[validate_email]
-    )
+    email = models.EmailField(max_length=100, unique=True, validators=[validate_email])
     gender = models.CharField(
         max_length=10,
         choices=[(gender.value, gender.value) for gender in Gender],
@@ -79,28 +77,32 @@ class Employee(BaseModel):
         return str(self.get_full_name())
 
     @classmethod
-    def males_over_35(cls):
+    def males_over_age(cls):
         """
         Get a list of all male employees older than 35 years old.
         """
 
         today = date.today()
-        employees_over_35 = []
+        age_variable = 35
 
-        for employee in cls.objects.filter(gender=Gender.MALE.value):
-            age = calculate_age(today, employee.birthday)
-            if age > 35:
-                employees_over_35.append(employee)
+        employees_over_age = [
+            employee
+            for employee in cls.objects.filter(gender=Gender.MALE.value)
+            if calculate_age(today, employee.birthday) > age_variable
+        ]
 
-        return employees_over_35
+        return employees_over_age
 
     @classmethod
-    def sale_after_2000(cls):
+    def sale_after_year(cls):
         """
         Get a list of employees in the Sales department and born after 2000.
         """
 
-        return cls.objects.filter(department__name="Sale", birthday__year__gt=2000)
+        year_of_birth = 2000
+        return cls.objects.filter(
+            department__name="Sale", birthday__year__gt=year_of_birth
+        )
 
     @classmethod
     def get_it_employees(cls):
