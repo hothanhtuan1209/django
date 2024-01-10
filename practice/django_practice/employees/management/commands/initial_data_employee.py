@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 
 from employees.models import Employee
 from departments.models import Department
+from django_practice.constants.enum import Gender
 
 
 class Command(BaseCommand):
@@ -22,7 +23,7 @@ class Command(BaseCommand):
             last_name = Faker().last_name()
             birthday = Faker().date_of_birth(minimum_age=20, maximum_age=60)
             email = Faker().email()
-            gender = random.choice(["Male", "Female"])
+            gender = random.choice([gender.value for gender in Gender])
             status = "Active"
 
             department = random.choice(departments)
