@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import date
 
 from departments.models import Department
 from django_practice.models import BaseModel
@@ -9,19 +8,15 @@ from .validate.validation_employee import validate_age, validate_email
 
 
 class EmployeeQuerySet(models.QuerySet):
-    def males_over_age(self):
+    def males_over_age(self, age_limit):
         """
         Get a list of all male employees older than 35 years old.
         """
+        number_of_age = calculate_age(age_limit + 1)
 
-        today = date.today()
-        age_male = 35
-
-        return [
-            employee
-            for employee in self.filter(gender=Gender.MALE.value)
-            if calculate_age(today, employee.birthday) > age_male
-        ]
+        return self.filter(
+            gender='Male', birthday__lte=number_of_age
+        )
 
     def sale_after_year(self):
         """
@@ -29,7 +24,9 @@ class EmployeeQuerySet(models.QuerySet):
         """
 
         year_of_birth = 2000
-        return self.filter(department__name="Sale", birthday__year__gt=year_of_birth)
+        return self.filter(
+            department__name="Sale", birthday__year__gt=year_of_birth
+        )
 
     def get_it_employees(self):
         """
@@ -45,21 +42,16 @@ class EmployeeFilterManager(models.Manager):
         Return a filtered EmployeeQuerySet for the current model's database.
         """
 
-        return EmployeeQuerySet(self.model, using=self._db).filter()
+        return EmployeeQuerySet(self.model, using=self._db)
 
-    def get_employees_filtered_by_age(self):
-        """
-        Get all employee have birthday greater than 20 years old
-        """
+    def males_over_age(self, age_limit):
+        return self.get_queryset().males_over_age(age_limit)
 
-        today = date.today()
-        age_limit = 20
+    def sale_after_year(self):
+        return self.get_queryset().sale_after_year()
 
-        return [
-            employee
-            for employee in self.filter()
-            if calculate_age(today, employee.birthday) > age_limit
-        ]
+    def get_it_employees(self):
+        return self.get_queryset().get_it_employees()
 
 
 class Employee(BaseModel):

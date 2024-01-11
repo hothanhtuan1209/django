@@ -1,14 +1,12 @@
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 
-def calculate_age(today, birthday):
+def calculate_age(age):
     """
     Calculate the age based on the provided birthday.
     """
-
     today = date.today()
-    calculated_age = today.year - birthday.year - (
-        (today.month, today.day) < (birthday.month, birthday.day)
-    )
+    male_age = today - relativedelta(years=age)
 
-    return calculated_age
+    return male_age
