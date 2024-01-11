@@ -15,15 +15,13 @@ class EmployeeQuerySet(models.QuerySet):
         """
 
         today = date.today()
-        age_variable = 35
+        age_male = 35
 
-        employees_over_age = [
+        return [
             employee
             for employee in self.filter(gender=Gender.MALE.value)
-            if calculate_age(today, employee.birthday) > age_variable
+            if calculate_age(today, employee.birthday) > age_male
         ]
-
-        return employees_over_age
 
     def sale_after_year(self):
         """
@@ -31,9 +29,7 @@ class EmployeeQuerySet(models.QuerySet):
         """
 
         year_of_birth = 2000
-        return self.filter(
-            department__name="Sale", birthday__year__gt=year_of_birth
-        )
+        return self.filter(department__name="Sale", birthday__year__gt=year_of_birth)
 
     def get_it_employees(self):
         """
@@ -44,6 +40,13 @@ class EmployeeQuerySet(models.QuerySet):
 
 
 class EmployeeFilterManager(models.Manager):
+    def get_queryset(self):
+        """
+        Return a filtered EmployeeQuerySet for the current model's database.
+        """
+
+        return EmployeeQuerySet(self.model, using=self._db).filter()
+
     def get_employees_filtered_by_age(self):
         """
         Get all employee have birthday greater than 20 years old
@@ -52,14 +55,11 @@ class EmployeeFilterManager(models.Manager):
         today = date.today()
         age_limit = 20
 
-        employees_over_20 = []
-
-        for employee in self.filter():
-            age = calculate_age(today, employee.birthday)
-            if age > age_limit:
-                employees_over_20.append(employee)
-
-        return employees_over_20
+        return [
+            employee
+            for employee in self.filter()
+            if calculate_age(today, employee.birthday) > age_limit
+        ]
 
 
 class Employee(BaseModel):
@@ -82,7 +82,9 @@ class Employee(BaseModel):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     birthday = models.DateField(validators=[validate_age])
-    email = models.EmailField(max_length=100, unique=True, validators=[validate_email])
+    email = models.EmailField(
+        max_length=100, unique=True, validators=[validate_email]
+    )
     gender = models.CharField(
         max_length=10,
         choices=[(gender.value, gender.value) for gender in Gender],
