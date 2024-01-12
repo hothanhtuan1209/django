@@ -10,13 +10,17 @@ class Contact(BaseModel):
     A class representing different contact within the system.
 
     Attributes:
-        id (UUIDField): The primary key for the contact.
-        phone_number (CharField): The employee's phone number.
-        address (CharField): The employee's address.
-        employee (ForeignKey): The instance of employee whom the
+        - id (UUIDField): The primary key for the contact.
+        - phone_number (CharField): The employee's phone number.
+        - address (CharField): The employee's address.
+        - employee (ForeignKey): The instance of employee whom the
         contact belongs.
-        create_at (DateTimeField): A field to store the creation time of
+        - create_at (DateTimeField): A field to store the creation time of
         objects.
+        - archived (BooleanField): A field to indicate whether the object is
+        archived (deleted) or not.
+        - modified_at (DateTimeField): A field to store the last modification
+        time of objects.
     """
 
     phone_number = models.CharField(

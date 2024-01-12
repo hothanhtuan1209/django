@@ -59,16 +59,20 @@ class Employee(BaseModel):
     A class representing different employees within the system.
 
     Attributes:
-        id (UUIDField): The primary key for the employee.
-        first_name (CharField): The first name of the employee.
-        last_name (CharField): The last name of the employee.
-        gender (CharField): The gender of the employee.
-        birthday (DateField): The employee's birth date.
-        email(EmailField): The employee's email.
-        status (CharField): The status of the employee in company.
-        department (ForeignKey): This is the instance of department.
-        create_at (DateTimeField): A field to store the creation time of
+        - id (UUIDField): The primary key for the employee.
+        - first_name (CharField): The first name of the employee.
+        - last_name (CharField): The last name of the employee.
+        - gender (CharField): The gender of the employee.
+        - birthday (DateField): The employee's birth date.
+        - email(EmailField): The employee's email.
+        - status (CharField): The status of the employee in company.
+        - department (ForeignKey): This is the instance of department.
+        - create_at (DateTimeField): A field to store the creation time of
         objects.
+        - archived (BooleanField): A field to indicate whether the object is
+        archived (deleted) or not.
+        - modified_at (DateTimeField): A field to store the last modification
+        time of objects.
     """
 
     first_name = models.CharField(max_length=100)
