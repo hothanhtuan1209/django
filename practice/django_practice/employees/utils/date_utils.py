@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 
 def find_date(age):
     """
-    Calculate the age based on the provided birthday.
+    Calculate the birthdate based on the provided age.
     """
     today = date.today()
     male_age = today - relativedelta(years=age)
