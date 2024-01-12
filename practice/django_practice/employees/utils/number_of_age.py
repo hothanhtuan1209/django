@@ -2,7 +2,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 
 
-def calculate_age(age):
+def find_date(age):
     """
     Calculate the age based on the provided birthday.
     """

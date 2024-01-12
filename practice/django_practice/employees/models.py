@@ -3,7 +3,7 @@ from django.db import models
 from departments.models import Department
 from django_practice.models import BaseModel
 from django_practice.constants.enum import Gender, ActiveStatus
-from .utils.number_of_age import calculate_age
+from .utils.number_of_age import find_date
 from .validate.validation_employee import validate_age, validate_email
 
 
@@ -12,7 +12,7 @@ class EmployeeQuerySet(models.QuerySet):
         """
         Get a list of all male employees older than 35 years old.
         """
-        number_of_age = calculate_age(age_limit + 1)
+        number_of_age = find_date(age_limit + 1)
 
         return self.filter(
             gender='Male', birthday__lte=number_of_age
