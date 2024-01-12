@@ -10,12 +10,13 @@ from .validate.validation_employee import validate_age, validate_email
 class EmployeeQuerySet(models.QuerySet):
     def males_over_age(self, age_limit):
         """
-        Get a list of all male employees older than 35 years old.
+        Get a list of all male employees older than a specified age limit.
         """
-        number_of_age = find_date(age_limit + 1)
+
+        birthdate_limit = find_date(age_limit + 1)
 
         return self.filter(
-            gender='Male', birthday__lte=number_of_age
+            gender='Male', birthday__lte=birthdate_limit
         )
 
     def sale_after_year(self):
