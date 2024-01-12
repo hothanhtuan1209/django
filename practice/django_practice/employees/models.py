@@ -3,7 +3,7 @@ from django.db import models
 from departments.models import Department
 from django_practice.models import BaseModel
 from django_practice.constants.enum import Gender, ActiveStatus
-from .utils.number_of_age import find_date
+from .utils.date_utils import find_date
 from .validate.validation_employee import validate_age, validate_email
 
 
