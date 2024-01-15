@@ -8,11 +8,12 @@
             "name": "Python Debugger: Django",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/django_practice/manage.py",
+            "program": "../django/practice/django_practice/manage.py",
             "args": [
                 "runserver"
             ],
-            "django": true
+            "django": true,
+            "justMyCode": true
         }
     ]
 }
