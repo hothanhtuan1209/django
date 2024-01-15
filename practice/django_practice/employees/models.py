@@ -4,7 +4,7 @@ from departments.models import Department
 from django_practice.models import BaseModel
 from django_practice.constants.enum import Gender, ActiveStatus
 from .utils.date_utils import find_date
-from .validate.validation_employee import validate_age, validate_email
+from .validate.validations import validate_age
 
 
 class EmployeeQuerySet(models.QuerySet):
@@ -79,9 +79,7 @@ class Employee(BaseModel):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     birthday = models.DateField(validators=[validate_age])
-    email = models.EmailField(
-        max_length=100, unique=True, validators=[validate_email]
-    )
+    email = models.EmailField(max_length=100, unique=True)
     gender = models.CharField(
         max_length=10,
         choices=[(gender.value, gender.value) for gender in Gender],
