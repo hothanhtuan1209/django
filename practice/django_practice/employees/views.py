@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
@@ -11,7 +11,6 @@ def employees(request):
     """
 
     employees_queryset = Employee.objects.all()
-    employees_name = request.GET.get('name')
 
     # Filter by name
     employees_name = request.GET.get('name')
@@ -39,7 +38,7 @@ def employees(request):
     except EmptyPage:
         employees_page = paginator.page(paginator.num_pages)
 
-    employees_data = [
+    context = [
         {
             'id': employee.id,
             'full_name': employee.get_full_name(),
@@ -48,4 +47,4 @@ def employees(request):
         for employee in employees_page
     ]
 
-    return JsonResponse({'employees': employees_data})
+    return render(request, 'list.html', context)
