@@ -38,13 +38,15 @@ def employees(request):
     except EmptyPage:
         employees_page = paginator.page(paginator.num_pages)
 
-    context = [
-        {
-            'id': employee.id,
-            'full_name': employee.get_full_name(),
-            'department': employee.department.name
-        }
-        for employee in employees_page
-    ]
+    context = {
+        'employees': [
+            {
+                'id': employee.id,
+                'full_name': employee.get_full_name(),
+                'department': employee.department.name
+            }
+            for employee in employees_page
+        ]
+    }
 
     return render(request, 'list.html', context)
