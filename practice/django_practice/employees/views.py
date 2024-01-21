@@ -1,24 +1,9 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
 
 from .models import Employee
 from django_practice.settings import PAGE_SIZE
-
-
-def build_query_filter(name, department):
-    """
-    Helper function to build the query filter based on name and department.
-    """
-    query_filter = Q()
-
-    if name:
-        query_filter |= Q(first_name__icontains=name) | Q(last_name__icontains=name)
-
-    if department:
-        query_filter &= Q(department__name=department)
-
-    return query_filter
+from .helper.build_query_filter import build_query_filter
 
 
 def employees(request):
@@ -41,13 +26,14 @@ def employees(request):
     except PageNotAnInteger:
         employees_page = paginator.page(1)
     except EmptyPage:
-        employees_page = paginator.page(paginator.num_pages)
+        employees_page = paginator.page(1)
 
     context = {
         "employees": [
             {
                 "id": employee.id,
                 "full_name": employee.get_full_name(),
+                "birthday": employee.birthday,
                 "department": employee.department.name,
             }
             for employee in employees_page
