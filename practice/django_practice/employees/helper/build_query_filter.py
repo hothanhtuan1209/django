@@ -3,11 +3,11 @@ from django.db.models import Q
 
 def build_query_filter(**kwargs):
     """
-    Helper function to build the query filter based on name and department.
+    Helper function to build the query filter based on name, department
+    or any field.
     """
 
     query_filter = Q()
-
     name = kwargs.get('name', None)
     department_names = kwargs.get('department', None)
 
