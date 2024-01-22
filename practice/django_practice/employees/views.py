@@ -11,14 +11,10 @@ def employees(request):
     This function gets a list of employees from the database.
     """
 
-    employee_name = request.GET.get("name")
-    department_name = request.GET.getlist("department")
+    request_data = request.GET
+    query_filter = build_query_filter(request_data)
+
     order_by = request.GET.get("order_by", "-created_at")
-
-    query_filter = build_query_filter(
-        name=employee_name, department_names=department_name
-    )
-
     employees_queryset = Employee.objects.filter(query_filter).order_by(order_by).values(
         'id', 'first_name', 'last_name', 'birthday', 'department__name'
     )

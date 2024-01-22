@@ -1,15 +1,15 @@
 from django.db.models import Q
 
 
-def build_query_filter(**kwargs):
+def build_query_filter(request_data):
     """
     Helper function to build the query filter based on name, department
     or any field.
     """
 
+    name = request_data.get('name', None)
+    department_names = request_data.getlist('department', None)
     query_filter = Q()
-    name = kwargs.get('name', None)
-    department_names = kwargs.get('department', None)
 
     if name:
         query_filter |= Q(first_name__icontains=name) | Q(last_name__icontains=name)
