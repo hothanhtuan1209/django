@@ -16,28 +16,20 @@ def employees(request):
     order_by = request.GET.get("order_by", "-created_at")
 
     query_filter = build_query_filter(employees_name, department_name)
-    employees_queryset = Employee.objects.filter(query_filter).order_by(order_by)
+    employees_queryset = Employee.objects.filter(query_filter).order_by(order_by).values(
+        'id', 'first_name', 'last_name', 'birthday', 'department__name'
+    )
 
     paginator = Paginator(employees_queryset, PAGE_SIZE)
     page = request.GET.get("page", 1)
 
     try:
         employees_page = paginator.page(page)
-    except PageNotAnInteger:
-        employees_page = paginator.page(1)
-    except EmptyPage:
+    except (PageNotAnInteger, EmptyPage):
         employees_page = paginator.page(1)
 
     context = {
-        "employees": [
-            {
-                "id": employee.id,
-                "full_name": employee.get_full_name(),
-                "birthday": employee.birthday,
-                "department": employee.department.name,
-            }
-            for employee in employees_page
-        ]
+        "employees": list(employees_page),
     }
 
     return render(request, "list.html", context)
