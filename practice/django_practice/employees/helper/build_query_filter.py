@@ -8,14 +8,14 @@ def build_query_filter(request_data):
     """
 
     name = request_data.get('name', None)
-    department_names = request_data.getlist('department', None)
+    departments = request_data.getlist('departments', None)
     query_filter = Q()
 
     if name:
-        query_filter |= Q(first_name__icontains=name) | Q(last_name__icontains=name)
+        query_filter &= Q(first_name__icontains=name) | Q(last_name__icontains=name)
 
-    if department_names:
-        for department in department_names:
-            query_filter |= Q(department__name=department)
+    if departments:
+        for department_id in departments:
+            query_filter &= Q(department__id=department_id)
 
     return query_filter
