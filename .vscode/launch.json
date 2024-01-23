@@ -5,12 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Django",
+            "name": "Python: Django",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/practice/django_practice/manage.py",
             "args": [
-                "runserver"
+                "runserver",
+                "--noreload"
             ],
             "django": true,
             "justMyCode": true
