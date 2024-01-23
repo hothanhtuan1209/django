@@ -12,13 +12,9 @@ def build_query_filter(request_data):
     query_filter = Q()
 
     if name:
-        query_filter |= Q(first_name__icontains=name) | Q(last_name__icontains=name)
+        query_filter &= Q(first_name__icontains=name) | Q(last_name__icontains=name)
 
     if departments:
-        department_query = Q()
-        for department_id in departments:
-            department_query |= Q(department__id=department_id)
-
-        query_filter &= department_query
+        query_filter &= Q(department__id__in=departments)
 
     return query_filter
