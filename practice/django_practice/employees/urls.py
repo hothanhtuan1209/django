@@ -3,5 +3,5 @@ from .views import employee_detail, employees
 
 urlpatterns = [
     path('', employees, name='employees'),
-    path('dt/<str:employee_id>/', employee_detail, name='employee_detail'),
+    path('detail/<str:employee_id>/', employee_detail, name='employee_detail'),
 ]
