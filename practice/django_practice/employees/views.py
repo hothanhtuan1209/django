@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.views import View
+from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Employee
@@ -35,18 +35,13 @@ def employees(request):
     return render(request, "list.html", context)
 
 
-class EmployeeDetailView(View):
-    template_name = 'employee_detail.html'
+@require_http_methods(["GET"])
+def employee_detail(request, employee_id):
+    """
+    This function to get detail of an employee by ID
+    """
 
-    def get(self, request, employee_id):
-        """
-        This function retrieves details of a specific employee.
-        """
+    employee = get_object_or_404(Employee, id=employee_id)
+    context = {'employee': employee}
 
-        employee = get_object_or_404(Employee, id=employee_id)
-
-        context = {
-            "employee": employee,
-        }
-        print(context)
-        return render(request, self.template_name, context)
+    return render(request, 'employee_detail.html', context)
