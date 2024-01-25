@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Employee
 from django_practice.settings import PAGE_SIZE
 from .helper.build_query_filter import build_query_filter
+from .forms import EmployeeForm
 
 
 def employees(request):
@@ -45,3 +48,25 @@ def employee_detail(request, employee_id):
     context = {'employee': employee}
 
     return render(request, 'employee_detail.html', context)
+
+
+@csrf_exempt
+@require_http_methods(['GET', 'POST'])
+def new_employee(request):
+    """
+    This is function to create a new employee.
+    """
+
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            return HttpResponse('Employee created successfully')
+
+    else:
+        form = EmployeeForm()
+
+    context = {'form': form}
+    return render(request, 'new_employee.html', context)
