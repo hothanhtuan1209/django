@@ -38,14 +38,31 @@ def employees(request):
     return render(request, "list.html", context)
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST", "PUT", "PATCH"])
 def employee_detail(request, employee_id):
     """
-    This function to get detail of an employee by ID
+    This function to get detail of an employee by ID and
+    update employee's information.
     """
 
     employee = get_object_or_404(Employee, id=employee_id)
-    context = {'employee': employee}
+    form = EmployeeForm(instance=employee)
+    context = {'form': form, 'employee': employee, "edit_mode": True}
+
+    if request.method == "GET":
+        return render(request, 'employee_detail.html', context)
+
+    elif request.method in ["PUT", "PATCH"]:
+        data = request.POST if request.method == "PATCH" else request.PUT
+        form = EmployeeForm(data, instance=employee)
+
+        if form.is_valid():
+            employee = form.save()
+            context = {'form': form, 'employee': employee, "edit_mode": True}
+            return render(request, 'employee_detail', context)
+
+        else:
+            context = {'form': form, 'employee': employee, "edit_mode": True}
 
     return render(request, 'employee_detail.html', context)
 
