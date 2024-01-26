@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
@@ -63,7 +63,7 @@ def new_employee(request):
         if form.is_valid():
             form.save()
 
-            return HttpResponse('Employee created successfully')
+            return redirect('employees')
 
     else:
         form = EmployeeForm()
