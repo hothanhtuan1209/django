@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Employee
@@ -40,31 +39,28 @@ def employees(request):
 
 @require_http_methods(["GET", "POST", "PUT", "PATCH"])
 def employee_detail(request, employee_id):
-    """
-    This function to get detail of an employee by ID and
-    update employee's information.
-    """
-
     employee = get_object_or_404(Employee, id=employee_id)
-    form = EmployeeForm(instance=employee)
-    context = {'form': form, 'employee': employee, "edit_mode": True}
 
     if request.method == "GET":
+        form = EmployeeForm(instance=employee)
+        context = {'form': form, 'employee': employee}
         return render(request, 'employee_detail.html', context)
 
-    elif request.method in ["PUT", "PATCH"]:
-        data = request.POST if request.method == "PATCH" else request.PUT
+    elif request.method in ["PUT", "POST", "PATCH"]:
+        data = request.POST if request.method == "PATCH" else request.POST
         form = EmployeeForm(data, instance=employee)
 
         if form.is_valid():
             employee = form.save()
-            context = {'form': form, 'employee': employee, "edit_mode": True}
-            return render(request, 'employee_detail', context)
-
+            form = EmployeeForm(instance=employee)
+            context = {'form': form, 'employee': employee}
         else:
-            context = {'form': form, 'employee': employee, "edit_mode": True}
+            context = {'form': form, 'employee': employee}
 
-    return render(request, 'employee_detail.html', context)
+        return render(request, 'employee_detail.html', context)
+
+    else:
+        return render(request, 'list.html', status=405)
 
 
 @csrf_exempt
