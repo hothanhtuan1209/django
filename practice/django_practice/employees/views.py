@@ -39,6 +39,10 @@ def employees(request):
 
 @require_http_methods(["GET", "POST", "PUT", "PATCH"])
 def employee_detail(request, employee_id):
+    """
+    This function to get detail and update information of employee.
+    """
+
     employee = get_object_or_404(Employee, id=employee_id)
 
     if request.method == "GET":
