@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Employee
@@ -41,13 +41,31 @@ def employees(request):
 @require_http_methods(["GET"])
 def employee_detail(request, employee_id):
     """
-    This function to get detail of an employee by ID
+    This function to get detail employee.
     """
 
     employee = get_object_or_404(Employee, id=employee_id)
     context = {'employee': employee}
+    return render(request, 'detail.html', context)
 
-    return render(request, 'employee_detail.html', context)
+
+@csrf_exempt
+@require_http_methods(["GET", "POST", "PUT", "PATCH"])
+def update_employee(request, employee_id):
+    """
+    This function to update information of employee.
+    """
+
+    employee = get_object_or_404(Employee, id=employee_id)
+
+    form = EmployeeForm(request.POST or None, instance=employee)
+
+    if form.is_valid():
+        employee = form.save()
+        detail_url = reverse('employee_detail', args=[str(employee.id)])
+        return redirect(detail_url)
+
+    return render(request, 'employee_update.html', {'form': form, 'employee': employee})
 
 
 @csrf_exempt
