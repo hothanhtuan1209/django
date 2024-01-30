@@ -18,10 +18,6 @@
 			<li><strong>Status:</strong> {{ employee.status }}</li>
 			<li><strong>Department:</strong> {{ employee.department }}</li>
 		</ul>
-
-		<form method="post" action="{% url 'employee_detail' employee.id %}">
-			{% csrf_token %}
-			<button type="submit">Update</button>
 		</form>
 	</body>
 </html>
