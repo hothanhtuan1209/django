@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Detail Employee</title>
+	</head>
+
+	<body>
+		<h1>Detail Employee</h1>
+		<ul>
+			<li><strong>ID:</strong> {{ employee.id }}</li>
+			<li><strong>First Name:</strong> {{ employee.first_name }}</li>
+			<li><strong>Last Name:</strong> {{ employee.last_name }}</li>
+			<li><strong>Gender:</strong> {{ employee.gender }}</li>
+			<li><strong>Birthday:</strong> {{ employee.birthday }}</li>
+			<li><strong>Email:</strong> {{ employee.email }}</li>
+			<li><strong>Status:</strong> {{ employee.status }}</li>
+			<li><strong>Department:</strong> {{ employee.department }}</li>
+		</ul>
+
+		<form method="post" action="{% url 'employee_detail' employee.id %}">
+			{% csrf_token %}
+			<button type="submit">Update</button>
+		</form>
+	</body>
+</html>

@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
@@ -37,34 +38,39 @@ def employees(request):
     return render(request, "list.html", context)
 
 
-@require_http_methods(["GET", "POST", "PUT", "PATCH"])
+@require_http_methods(["GET"])
 def employee_detail(request, employee_id):
     """
-    This function to get detail and update information of employee.
+    This function to get detail employee.
+    """
+
+    employee = get_object_or_404(Employee, id=employee_id)
+    form = EmployeeForm(instance=employee)
+    context = {'form': form, 'employee': employee}
+    return render(request, 'detail.html', context)
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST", "PUT", "PATCH"])
+def update_employee(request, employee_id):
+    """
+    This function to update information of employee.
     """
 
     employee = get_object_or_404(Employee, id=employee_id)
 
-    if request.method == "GET":
-        form = EmployeeForm(instance=employee)
-        context = {'form': form, 'employee': employee}
-        return render(request, 'employee_detail.html', context)
-
-    elif request.method in ["PUT", "POST", "PATCH"]:
-        data = request.POST if request.method == "PATCH" else request.POST
-        form = EmployeeForm(data, instance=employee)
+    if request.method in ["PUT", "POST", "PATCH"]:
+        form = EmployeeForm(request.POST, instance=employee)
 
         if form.is_valid():
             employee = form.save()
-            form = EmployeeForm(instance=employee)
-            context = {'form': form, 'employee': employee}
-        else:
-            context = {'form': form, 'employee': employee}
-
-        return render(request, 'employee_detail.html', context)
-
+            detail_url = reverse('employee_detail', args=[str(employee.id)])
+            return redirect(detail_url)
     else:
-        return render(request, 'list.html', status=405)
+        form = EmployeeForm(instance=employee)
+
+    return render(request, 'employee_detail.html', {'form': form, 'employee': employee})
+
 
 
 @csrf_exempt
