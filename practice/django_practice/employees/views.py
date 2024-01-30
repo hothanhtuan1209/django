@@ -69,7 +69,7 @@ def update_employee(request, employee_id):
     else:
         form = EmployeeForm(instance=employee)
 
-    return render(request, 'employee_detail.html', {'form': form, 'employee': employee})
+    return render(request, 'employee_update.html', {'form': form, 'employee': employee})
 
 
 @csrf_exempt
