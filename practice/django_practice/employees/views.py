@@ -45,8 +45,7 @@ def employee_detail(request, employee_id):
     """
 
     employee = get_object_or_404(Employee, id=employee_id)
-    form = EmployeeForm(instance=employee)
-    context = {'form': form, 'employee': employee}
+    context = {'employee': employee}
     return render(request, 'detail.html', context)
 
 
