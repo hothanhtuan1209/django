@@ -72,7 +72,6 @@ def update_employee(request, employee_id):
     return render(request, 'employee_detail.html', {'form': form, 'employee': employee})
 
 
-
 @csrf_exempt
 @require_http_methods(['GET', 'POST'])
 def new_employee(request):
