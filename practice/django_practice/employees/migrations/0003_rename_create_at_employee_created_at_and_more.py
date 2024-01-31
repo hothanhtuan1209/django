@@ -28,7 +28,6 @@ class Migration(migrations.Migration):
             field=models.EmailField(
                 max_length=100,
                 unique=True,
-                validators=[employees.validate.validations.validate_email],
             ),
         ),
     ]

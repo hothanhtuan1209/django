@@ -9,6 +9,8 @@ def validate_age(birthday):
         raise ValidationError("Employee must be at least 18 years old")
 
 
-def validate_email(email):
-    if not email or "@" not in email:
-        raise ValidationError("Invalid email format")
+def validate_name(text):
+    words = text.split()
+    for word in words:
+        if not word[0].isupper():
+            raise ValidationError("The first letter of a word must be capitalized")
