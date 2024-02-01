@@ -19,7 +19,6 @@ class Migration(migrations.Migration):
             model_name="employee",
             name="birthday",
             field=models.DateField(
-                validators=[employees.validate.validations.validate_age]
             ),
         ),
         migrations.AlterField(

@@ -78,7 +78,7 @@ class Employee(BaseModel):
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    birthday = models.DateField(validators=[validate_age])
+    birthday = models.DateField()
     email = models.EmailField(max_length=100, unique=True)
     gender = models.CharField(
         max_length=10,

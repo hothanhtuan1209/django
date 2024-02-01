@@ -1,6 +1,6 @@
 from django import forms
 from .models import Employee
-from .validate.validations import validate_name
+from .validate.validations import validate_name, validate_age
 
 
 class EmployeeForm(forms.ModelForm):
@@ -10,6 +10,7 @@ class EmployeeForm(forms.ModelForm):
 
     first_name = forms.CharField(validators=[validate_name])
     last_name = forms.CharField(validators=[validate_name])
+    birthday = forms.DateField(validators=[validate_age])
 
     class Meta:
         model = Employee
