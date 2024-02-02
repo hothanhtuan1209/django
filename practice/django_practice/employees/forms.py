@@ -7,11 +7,21 @@ class EmployeeForm(forms.ModelForm):
     """
     This is form to create a new employee.
     """
+    def clean_first_name(self):
+        first_name = self.cleaned_data['first_name']
+        validate_name(first_name)
+        return first_name
 
-    first_name = forms.CharField(validators=[validate_name])
-    last_name = forms.CharField(validators=[validate_name])
-    birthday = forms.DateField(validators=[validate_age])
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        validate_name(last_name)
+        return last_name
+
+    def clean_birthday(self):
+        birthday = self.cleaned_data['birthday']
+        validate_age(birthday)
+        return birthday
 
     class Meta:
         model = Employee
-        fields = ['first_name', 'last_name', 'birthday', 'email', 'gender', 'status', 'department']
+        fields = '__all__'
