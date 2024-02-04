@@ -66,7 +66,7 @@ def update_employee(request, employee_id):
         detail_url = reverse('employee_detail', args=[str(employee.id)])
         return redirect(detail_url)
 
-    return render(request, 'employee_update.html', {'form': form, 'employee': employee})
+    return render(request, 'employee_update.html', {'form': form})
 
 
 @csrf_exempt
