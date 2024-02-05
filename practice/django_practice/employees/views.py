@@ -51,7 +51,7 @@ def employee_detail(request, employee_id):
 
 
 @csrf_exempt
-@require_http_methods(["GET", "POST", "PUT", "PATCH"])
+@require_http_methods(["GET", "POST"])
 def update_employee(request, employee_id):
     """
     This function to update information of employee.
