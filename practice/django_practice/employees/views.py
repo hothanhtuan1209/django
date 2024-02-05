@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 from .models import Employee
 from django_practice.settings import PAGE_SIZE
@@ -50,7 +51,7 @@ def employee_detail(request, employee_id):
 
 
 @csrf_exempt
-@require_http_methods(["GET", "POST", "PUT", "PATCH"])
+@require_http_methods(["GET", "POST"])
 def update_employee(request, employee_id):
     """
     This function to update information of employee.
@@ -65,7 +66,7 @@ def update_employee(request, employee_id):
         detail_url = reverse('employee_detail', args=[str(employee.id)])
         return redirect(detail_url)
 
-    return render(request, 'employee_update.html', {'form': form, 'employee': employee})
+    return render(request, 'employee_update.html', {'form': form})
 
 
 @csrf_exempt
@@ -88,3 +89,19 @@ def new_employee(request):
 
     context = {'form': form}
     return render(request, 'new_employee.html', context)
+
+
+@csrf_exempt
+@require_http_methods(["DELETE"])
+def delete_employee(request, employee_id):
+    """
+    This function deletes an employee using the DELETE method.
+    """
+
+    employee = get_object_or_404(Employee, id=employee_id)
+
+    if request.method == 'DELETE':
+        employee.delete()
+        return redirect('employees')
+
+    return HttpResponse(status=405)
